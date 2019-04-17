@@ -12,7 +12,7 @@ Second tracks a moving target using head camera images and follows it in a speci
 
 
 ## Abstract
-<img src="presentation/video/v25_01.gif" width=40% align="right" />
+<img src="images/v25_01.gif" width=40% align="right" />
 
 <p align="justify">
 Similar to their biological counterparts, the flexible body shape of snake-like robots 
@@ -160,47 +160,8 @@ The results are stored in OPENAI_LOGDIR.
 
 
 
-#### 2. Experiment: Target tracking
-
-Train:
-```bash 
-gym_mujoco_planar_snake/agents/run_mujoco_ppo.py --train=1 --env Mujoco-planar-snake-cars-cam-dist-random-v1
-```
-The model is stored in OPENAI_LOGDIR/models/ENV/PPO.
-
-
-Enjoy:
-```bash 
-gym_mujoco_planar_snake/agents/run_mujoco_ppo.py --env Mujoco-planar-snake-cars-cam-dist-random-v1
-```
-
-Evaluate:
-```bash 
-gym_mujoco_planar_snake/agents/run_mujoco_ppo.py --env Mujoco-planar-snake-cars-cam-dist-random-v1 --evaluate_target_tracking
-```
-The results are stored in OPENAI_LOGDIR.
-
-
-Create target tracking result plot:
-```bash 
-gym_mujoco_planar_snake/benchmark/plots.py
-```
-Check which evaluation is active in main(). 
-The results are stored in OPENAI_LOGDIR.
-
 
 #### Plots and data
-See the files in directory [gym_mujoco_planar_snake/benchmark/plot_data](https://github.com/christianlemke/gym_mujoco_planar_snake/benchmark/plot_data).
+See the files in directory [gym_mujoco_planar_snake/benchmark/plot_data].
 
 
-### Cite
-To cite this repository in publications:
-
-    @misc{Lemke2018Reinf,
-      author = {Lemke, Christian and Bing, Zhenshan},
-      title = {Reinforcement Learning for Autonomous Locomotion Control of Snake-Like Robots},
-      year = {2018},
-      publisher = {GitHub},
-      journal = {GitHub repository},
-      howpublished = {\url{https://github.com/christianlemke/masterthesis}},
-    }
