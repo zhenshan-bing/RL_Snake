@@ -1,0 +1,314 @@
+<mujoco model="planar_snake_car_servo">
+    <compiler angle="degree" coordinate="local" inertiafromgeom="true"/>
+
+    <!-- changed timestep from 0.01 to 0.05 (0.0125*4?)   Simulation time step in seconds. 50ms = 0.05s-->
+    <!-- RK4 to euler -->
+    <!--
+    <option integrator="RK4" timestep="0.0125">
+    -->
+    <option integrator="Euler" timestep="0.0125">
+        <flag energy="enable" clampctrl="enable"/>
+
+    </option>
+
+    <size nconmax="1000"/>
+    <!--
+    Units Joints
+    hinge: angular velocity (rad/s)
+    hinge: angle (rad)
+    slider: velocity (m/s)
+    slider: position (m)
+
+    Units Actuators
+    hinge: torque (N m)
+    -->
+
+    <!--  ================= defaults ================= /-->
+    <default>
+
+        <!-- for power effizient experiment-->
+        <!-- 600-->
+        <geom conaffinity="0" condim="3" friction="1 0.05 0.00001" margin="0.01" density="600" />
+
+
+        <!-- for Target Tracking experiment-->
+        <!-- 800
+        <geom conaffinity="0" condim="3" friction="1 0.05 0.00001" margin="0.01" density="800" />
+        -->
+
+
+        <!-- friction="1 0.5 0.0001"
+        The internal default of 1000 is the density of water in SI units.
+        -->
+        <!-- friction="2 0.5 0.0001" -->
+
+        <joint armature='0.001' damping="0" frictionloss="0.001" />
+        <!-- armature='1' damping="1" -->
+
+        <!--
+          <default class="back">
+              <geom fromto="0 0 0 -0.5 0 0" size="0.1" type="capsule"/>
+              <joint pos="0 0 0" limited="true" type="hinge"/>
+          </default>
+        -->
+        <default class="wheel">
+            <joint axis="0 1 0" type="hinge" damping="0.2"/>
+            <!-- size 0.1  friction 1 0.005 0.0001-->
+            <!-- friction="1.25 1.0 0.0001"-->
+            <geom type="cylinder" fromto="0 0 0  0 0.025 0" size="0.05" material="geom" rgba=".9 .9 .9 1" friction="1.25 1.0 0.0001"/>
+        </default>
+
+        <default class="car">
+            <geom material="geom" rgba="0.8 0.7 .6 1" />
+            <joint pos="0 0 0" axis="0 0 1" type="hinge" limited="true" range="-90 90"/>
+        </default>
+
+        <!--
+        forcerange: Range for clamping the force output. more strength, more acceleration to get to the position
+        kp: servo gain, Position feedback gain
+        stiffness: (also known as proportional gain) 400, 300
+        damping: (also known as derivative gain), and feedback gain, absorb vibration energy
+        gear: scales the length (and consequently moment arms, velocity and force),
+        frictionloss: Friction loss due to dry friction/static friction
+        density: volume*mass, resulting in the weight depending on the model size
+        armature: Armature inertia (or rotor inertia)
+
+        ctrlrange: looks like with 90d it can move between [-1.5, 1.5] TODO not [-2.0, 2.0]?
+        <position ctrllimited="true" ctrlrange="-1.5 1.5" forcelimited="true" forcerange="-40.0 40.0" kp="50" gear="1"/>
+        <position ctrllimited="true" ctrlrange="-1.5 1.5" forcelimited="true" forcerange="-20.0 20.0" kp="10" gear="1"/>
+
+        <position ctrllimited="true" ctrlrange="-1.5 1.5" forcelimited="true" forcerange="-40.0 40.0" kp="15" gear="0.175"/>
+
+        kp20
+        kp22
+        kp24
+        kp23 <-
+        kp21
+        kp19
+        kp20 <-
+
+
+        -->
+        <position ctrllimited="true" ctrlrange="-1.5 1.5" forcelimited="true" forcerange="-20.0 20.0" kp="20" gear="0.175"/>
+
+    </default>
+
+    <asset>
+        <texture builtin="gradient" height="100" rgb1="1 1 1" rgb2="0 0 0" type="skybox" width="100"/>
+        <texture builtin="flat" height="1278" mark="cross" markrgb="1 1 1" name="texgeom" random="0.01"
+                 rgb1="0.8 0.6 0.4" rgb2="0.8 0.6 0.4" type="cube" width="127"/>
+        <texture builtin="checker" height="100" name="texplane" rgb1="0 0 0" rgb2="0.8 0.8 0.8" type="2d" width="100"/>
+        <material name="MatPlane" reflectance="0.5" shininess="1" specular="1" texrepeat="80 80" texture="texplane"/>
+        <!-- 80 80 is one le -->
+        <material name="geom" texture="texgeom" texuniform="true"/>
+
+        <!-- My Textures -->
+        <!--
+        <texture name="TexGrass" file="grass3.png" type="2d" />
+        <material name="MatGrass" reflectance="0.05" shininess="0.1" specular="0.1" texrepeat="25 25" texture="TexGrass"/>
+        -->
+        <material name="MatTarget" rgba="1 0 0 1" reflectance="0.05" shininess="0.1" specular="0.1"/>
+    </asset>
+
+
+    <visual>
+        <map znear="0.0625"  />
+        <!--
+        <map znear="0.0625"  />
+        <map znear="0.075"  />
+        <map znear="0.08"  />
+
+        <scale />
+        <global fovy="90" glow="0"/>
+        <headlight ambient="1 1 1" diffuse="0 0 0" specular="0 0 0"/>
+        <headlight ambient=".4 .4 .4" diffuse=".8 .8 .8" specular="0.1 0.1 0.1"/>
+        <quality shadowsize="4096"/>
+
+         for plots
+        <quality shadowsize="16384"/>
+        -->
+        <quality shadowsize="4096"/>
+
+    </visual>
+
+
+    <worldbody>
+        <light cutoff="100" diffuse="1 1 1" dir="-0 0 -1.3" directional="true" exponent="1" pos="0 0 1.3"
+               specular=".1 .1 .1"/>
+        <!-- <geom conaffinity="1" condim="3" material="MatPlane" name="floor" pos="0 0 -0.1" rgba="0.8 0.9 0.8 1" size="40 40 40" type="plane"/>-->
+        <geom name="floor" size="80 80 10" material="MatPlane" conaffinity="1" condim="3" pos="0 0 -0.1" rgba="0.8 0.9 0.8 1" type="plane"/>
+
+        <!--  ================= Sun ================= /-->
+        <!--
+        <body name="sun" pos="0 -4 5">
+            <light pos="0 0 0" mode="trackcom" directional="false"/>
+            <joint axis="1 0 0" name="sun_slider_x" type="slide"/>
+            <joint axis="0 1 0" name="sun_slider_y" type="slide"/>
+            <geom type="sphere" size="1" material="MatTarget" rgba="1.0 1.0 0.0 1"/>
+        </body>
+        -->
+
+        <!--  ================= Target ================= /-->
+        <!-- <body name="target_ball" pos="3 0 0.2"> -->
+        <body name="target_ball" pos="0 0 0.1">
+            <joint axis="1 0 0" name="target_slider_x" type="slide"/>
+            <joint axis="0 1 0" name="target_slider_y" type="slide"/>
+            <geom name="target_ball_geom" type="sphere" pos="0 0 0" size="0.2" material="MatTarget"/>
+            <camera name="track_ball" mode="trackcom" pos="0 -4 6" euler="30 0 0"/>
+            <camera name="track_ball2" mode="targetbodycom" pos="0 0 1" zaxis="0 0 90" />
+        </body>
+
+        <!--
+        <body name="dist" pos="0.5 0 0">
+            <site name='site_dist' pos='0 0 0' type='box' group='1' size='1 0.1 0.1'/>
+        </body>
+
+
+        <body name="dist1" pos="0.0 0 .05">
+            <site name='site_dist1' pos='0 0 0' type='box' group='1' size='0.1 0.1 0.1'/>
+        </body>
+
+        <body name="dist2" pos="4.0 0 .05">
+            <site name='site_dist2' pos='0 0 0' type='box' group='1' size='0.1 0.1 0.1'/>
+        </body>
+    -->
+
+
+
+        <!--  =================  ================= /-->
+        <body name="car1" pos="0 0 0.0">
+
+            <joint axis="1 0 0" name="slider_x" type="slide"/>
+            <joint axis="0 1 0" name="slider_y" type="slide"/>
+            <joint axis="0 0 1" name="slider_z" type="slide"/>
+
+            <!--
+            <joint axis="0 1 0" name="hinge_y" type="hinge"/>
+            -->
+            <joint pos="0 0 0" axis="1 0 0" name="hinge_x" type="hinge"/>
+            <joint pos="0 0 0" axis="0 1 0" name="hinge_y" type="hinge"/>
+            <joint pos="0 0 0" axis="0 0 1" name="hinge_z" type="hinge"/>
+
+            <body pos="-0.175 0.05 -0.05" childclass="wheel"><joint name="joint_wheel_l_00"/><geom/></body>
+            <geom name="head" pos="-0.175 0 0" size="0.125 0.05 0.05" type="box" material="geom" rgba="0.8 0.7 .6 1"/>
+            <geom fromto="-0.30 0 0  -0.05 0 0" size="0.05" type="capsule" rgba="1.0 0.0 0.0 1"/>
+            <body pos="-0.175 -0.075 -0.05" childclass="wheel"><joint name="joint_wheel_r_00"/><geom/></body>
+
+            <site name='site_head' pos='-0.175 0 0.0' type='box'  size='.01 .01 .01'/>
+
+            <camera name="head" mode="fixed" pos="0 0 0.025" fovy="90" euler="90 -90 0"/>
+            <camera name="track_snake1" mode="trackcom" pos="-1.4 -1.25 2.25" euler="30 0 0"/>
+            <camera name="track_snake2" mode="trackcom" pos="-1.5 0 3" euler="0 0 0"/>
+            <camera name="track_snake3" mode="trackcom" pos="0 -4 6" euler="30 0 0"/>
+            <camera name="track_snake31" mode="trackcom" pos="1.25 -3.75 4.5" euler="30 0 0"/>
+            <camera name="track_snake32" mode="trackcom" pos="-4.0 0.0 0.75" euler="00 -90 00"/>
+            <camera name="track_snake33" mode="trackcom" pos="-4.5 0.0 1.75" xyaxes="0.0 -1 0.0 0.6 0 1 "/>
+            <camera name="track_snake4" mode="trackcom" pos="0 0 5" euler="0 0 0"/>
+
+            <body name="car2" pos="-0.35 0 0" childclass="car">
+                <joint name="joint01"/>
+                <body pos="-0.175 0.05 -0.05" childclass="wheel"><joint name="joint_wheel_l_01"/><geom/></body>
+                <geom name="car2_geom" pos="-0.175 0 0" size="0.125 0.05 0.05" type="box" material="geom" rgba="0.8 0.7 .6 1"/>
+                <geom fromto="-0.30 0 0 -0.05 0 0" size="0.05" type="capsule" rgba="1.0 0.0 0.0 1"/>
+                <body pos="-0.175 -0.075 -0.05" childclass="wheel"><joint name="joint_wheel_r_01"/><geom/></body>
+
+                <body name="car3" pos="-0.35 0 0" childclass="car">
+                    <joint name="joint02"/>
+                    <body pos="-0.175 0.05 -0.05" childclass="wheel"><joint name="joint_wheel_l_02"/><geom/></body>
+                    <geom name="car3_geom" pos="-0.175 0 0" size="0.125 0.05 0.05" type="box" material="geom" rgba="0.8 0.7 .6 1"/>
+                    <geom fromto="-0.30 0 0  -0.05 0 0" size="0.05" type="capsule" rgba="1.0 0.0 0.0 1"/>
+                    <body pos="-0.175 -0.075 -0.05" childclass="wheel"><joint name="joint_wheel_r_02"/><geom/></body>
+
+                    <body name="car4" pos="-0.35 0 0" childclass="car">
+                        <joint name="joint03"/>
+                        <body pos="-0.175 0.05 -0.05" childclass="wheel"><joint name="joint_wheel_l_03"/><geom/></body>
+                        <geom name="car4_geom" pos="-0.175 0 0" size="0.125 0.05 0.05" type="box" material="geom" rgba="0.8 0.7 .6 1"/>
+                        <geom fromto="-0.30 0 0  -0.05 0 0" size="0.05" type="capsule" rgba="1.0 0.0 0.0 1"/>
+                        <body pos="-0.175 -0.075 -0.05" childclass="wheel"><joint name="joint_wheel_r_03"/><geom/></body>
+
+                        <body name="car5" pos="-0.35 0 0" childclass="car">
+                            <joint name="joint04"/>
+                            <body pos="-0.175 0.05 -0.05" childclass="wheel"><joint name="joint_wheel_l_04"/><geom/></body>
+                            <geom name="car5_geom" pos="-0.175 0 0" size="0.125 0.05 0.05" type="box" material="geom" rgba="0.8 0.7 .6 1"/>
+                            <geom fromto="-0.30 0 0  -0.05 0 0" size="0.05" type="capsule" rgba="1.0 0.0 0.0 1"/>
+                            <body pos="-0.175 -0.075 -0.05" childclass="wheel"><joint name="joint_wheel_r_04"/><geom/></body>
+
+                            <body name="car6" pos="-0.35 0 0" childclass="car">
+                                <joint name="joint05"/>
+                                <body pos="-0.175 0.05 -0.05" childclass="wheel"><joint name="joint_wheel_l_05"/><geom/></body>
+                                <geom name="car6_geom" pos="-0.175 0 0" size="0.125 0.05 0.05" type="box" material="geom" rgba="0.8 0.7 .6 1"/>
+                                <geom fromto="-0.30 0 0  -0.05 0 0" size="0.05" type="capsule" rgba="1.0 0.0 0.0 1"/>
+                                <body pos="-0.175 -0.075 -0.05" childclass="wheel"><joint name="joint_wheel_r_05"/><geom/></body>
+
+                                <body name="car7" pos="-0.35 0 0" childclass="car">
+                                    <joint name="joint06"/>
+                                    <body pos="-0.175 0.05 -0.05" childclass="wheel"><joint name="joint_wheel_l_06"/><geom/></body>
+                                    <geom name="car7_geom" pos="-0.175 0 0" size="0.125 0.05 0.05" type="box" material="geom" rgba="0.8 0.7 .6 1"/>
+                                    <geom fromto="-0.30 0 0  -0.05 0 0" size="0.05" type="capsule" rgba="1.0 0.0 0.0 1"/>
+                                    <body pos="-0.175 -0.075 -0.05" childclass="wheel"><joint name="joint_wheel_r_06"/><geom/></body>
+
+                                    <body name="car8" pos="-0.35 0 0" childclass="car">
+                                        <joint name="joint07"/>
+                                        <body pos="-0.175 0.05 -0.05" childclass="wheel"><joint name="joint_wheel_l_07"/><geom/></body>
+                                        <geom name="car8_geom" pos="-0.175 0 0" size="0.125 0.05 0.05" type="box" material="geom" rgba="0.8 0.7 .6 1"/>
+                                        <geom fromto="-0.30 0 0  -0.05 0 0" size="0.05" type="capsule" rgba="1.0 0.0 0.0 1"/>
+                                        <body pos="-0.175 -0.075 -0.05" childclass="wheel"><joint name="joint_wheel_r_07"/><geom/></body>
+
+                                        <body name="car9" pos="-0.35 0 0" childclass="car">
+                                            <joint name="joint08"/>
+                                            <body pos="-0.175 0.05 -0.05" childclass="wheel"><joint name="joint_wheel_l_08"/><geom/></body>
+                                            <geom name="car9_geom" pos="-0.175 0 0" size="0.125 0.05 0.05" type="box" material="geom" rgba="0.8 0.7 .6 1"/>
+                                            <geom fromto="-0.30 0 0  -0.05 0 0" size="0.05" type="capsule" rgba="1.0 0.0 0.0 1"/>
+                                            <body pos="-0.175 -0.075 -0.05" childclass="wheel"><joint name="joint_wheel_r_08"/><geom/></body>
+
+                                        </body>
+                                    </body>
+                                </body>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+    <actuator >
+        <!--
+        <motor joint="joint01"/>
+        <motor joint="joint02"/>
+        <motor joint="joint03"/>
+        <motor joint="joint04"/>
+        <motor joint="joint05"/>
+        <motor joint="joint06"/>
+        <motor joint="joint07"/>
+        <motor joint="joint08"/>
+        -->
+        <position name="actuator_joint01" joint="joint01"/>
+        <position name="actuator_joint02" joint="joint02"/>
+        <position name="actuator_joint03" joint="joint03"/>
+        <position name="actuator_joint04" joint="joint04"/>
+        <position name="actuator_joint05" joint="joint05"/>
+        <position name="actuator_joint06" joint="joint06"/>
+        <position name="actuator_joint07" joint="joint07"/>
+        <position name="actuator_joint08" joint="joint08"/>
+
+    </actuator>
+    <sensor>
+        <!--
+        <jointpos name="sensor_jointpos_joint01" joint="joint01" />
+        <jointvel name="sensor_jointvel_joint01" joint="joint01" />
+        -->
+
+        <actuatorfrc name="sensor_actuatorfrc_joint01" actuator="actuator_joint01" />
+        <actuatorfrc name="sensor_actuatorfrc_joint02" actuator="actuator_joint02" />
+        <actuatorfrc name="sensor_actuatorfrc_joint03" actuator="actuator_joint03" />
+        <actuatorfrc name="sensor_actuatorfrc_joint04" actuator="actuator_joint04" />
+        <actuatorfrc name="sensor_actuatorfrc_joint05" actuator="actuator_joint05" />
+        <actuatorfrc name="sensor_actuatorfrc_joint06" actuator="actuator_joint06" />
+        <actuatorfrc name="sensor_actuatorfrc_joint07" actuator="actuator_joint07" />
+        <actuatorfrc name="sensor_actuatorfrc_joint08" actuator="actuator_joint08" />
+
+        <velocimeter name="sensor_velocimeter" site="site_head"/>
+        <accelerometer name="sensor_accelerometer" site="site_head"/>
+
+    </sensor>
+</mujoco>

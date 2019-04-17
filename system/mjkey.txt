@@ -1,0 +1,20 @@
+MuJoCo Pro Personal license activation key, number 38411, type 6.
+
+Issued to Christian Lemke <christian.lemke@campus.lmu.de>.
+
+Expires October 24, 2018.
+
+This file activates MuJoCo Pro on a single computer with id:
+LINUX_o3713n0S080e1nS_D84313t0Is5371
+
+Do not modify this file. Its entire content, including the
+plain text section, is used by the activation manager.
+
+27f36b7cd9247a1a61edcc3423c746d4daa0aef1275cf440f0dc9de80009d63d
+ac15642a99ae49cb6118f01065ca971bb1acdb76fdba6efe1ff3ed5403d95dd8
+faa436cf2e05e9b33774838d117361de7f231deead71ed0a4a5bdd304fcafbdb
+d8fb4bbc0d2d0ccad0c6a04e2b0ca39d6d5f6e4b897272b93d5c9251e0ab31cd
+9c27195468ab071457f562cd2c58ba4f6eaa976267ba0085dc6d3d8d6d19d32a
+52e5ce5cb0077b3262325ade547cd00f5cf8426bea0668a0bac66adc4cbf26a3
+157f344da84955bc6d9ee3751bca76e3213036a7614bdae481205b775a613d12
+93171b78d7c4560eab5b39e739f8e84d3d6d3ffceb7b890c6817578692bb68d3
