@@ -245,6 +245,20 @@ def evaluate_power_velocity(env_id):
 
 
 
+def evaluate_target_tracking(env_id):
+    env = gym.make(env_id)
+    env._max_episode_steps = env.spec.max_episode_steps * 2
+
+    render = True
+
+    lambda_deg = 40
+    alpha_deg = 70
+    w_para = 1*np.pi
+    y_para = 0.4
+
+    done, number_of_timesteps, info_collector = \
+            run_environment_episode(env, env._max_episode_steps, render, lambda_deg, alpha_deg, w_para, y_para)
+
 def enjoy(env_id):
 
     env = gym.make(env_id)
@@ -285,8 +299,8 @@ def main():
     parser.add_argument('--evaluate_power_velocity', type=bool, default=False)  # 1e6
 
     # env
-    #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-v1')
-    parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-line-v1')
+    parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-v1')
+    #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-line-v1')
     #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-zigzag-v1')
     #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-circle-v1')
     #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-random-v1')
@@ -298,13 +312,17 @@ def main():
     # TODO CUDA off -> CPU only!
     os.environ['CUDA_VISIBLE_DEVICES'] = ''
 
+
+    # Evaluate power velocity
     if args.evaluate_power_velocity:
         print("----------First----------")
         evaluate_power_velocity(args.env)
-        
+    
+    # Enjoy this controller    
     else:
         print("----------Second----------")
-        enjoy(args.env)
+        evaluate_target_tracking(args.env)
+        # enjoy(args.env)
         
 
 if __name__ == '__main__':
