@@ -31,6 +31,14 @@ register(
     reward_threshold=6000.0,
 )
 
+# Bing Create this for testing 
+register(
+    id='Mujoco-planar-snake-cars-angle-v1',
+    entry_point='gym_mujoco_planar_snake.envs.mujoco_15:MujocoPlanarSnakeCarsAngleLineEnv',
+    max_episode_steps=1000,
+    reward_threshold=6000.0,
+)
+
 register(
     id='Mujoco-planar-snake-cars-cam-line-v1',
     entry_point='gym_mujoco_planar_snake.envs.mujoco_15:MujocoPlanarSnakeCarsCamLineEnv',

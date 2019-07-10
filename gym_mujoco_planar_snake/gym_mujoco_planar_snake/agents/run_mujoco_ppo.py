@@ -426,6 +426,7 @@ def main():
         evaluate_power_velocity(args.env)
 
     elif args.evaluate_target_tracking:
+        print("------HERE-------")
         evaluate_target_tracking(args.env)
 
     elif args.train:

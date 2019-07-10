@@ -3,6 +3,9 @@ from gym_mujoco_planar_snake.envs.mujoco_15.mujoco_planar_snake_cars_cam import 
 from gym_mujoco_planar_snake.envs.mujoco_15.mujoco_planar_snake_cars_cam import MujocoPlanarSnakeCarsCamWaveDistanceEnv
 
 from gym_mujoco_planar_snake.envs.mujoco_15.mujoco_planar_snake_cars_cam import MujocoPlanarSnakeCarsAngleLineEnv
+### Bing Create this
+from gym_mujoco_planar_snake.envs.mujoco_15.mujoco_planar_snake_cars_cam import MujocoPlanarSnakeCarsAngleEnv
+###
 from gym_mujoco_planar_snake.envs.mujoco_15.mujoco_planar_snake_cars_cam import MujocoPlanarSnakeCarsCamLineEnv
 from gym_mujoco_planar_snake.envs.mujoco_15.mujoco_planar_snake_cars_cam import MujocoPlanarSnakeCarsCamLineDistanceEnv
 

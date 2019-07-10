@@ -724,8 +724,6 @@ class MujocoPlanarSnakeCarsCamEnv(MujocoPlanarSnakeCarsEnv, MujocoHeadCam):
                                        )
 
 
-
-
 # target tracks
 
 class MujocoPlanarSnakeCarsAngleLineEnv(MujocoPlanarSnakeCarsAngleEnv):

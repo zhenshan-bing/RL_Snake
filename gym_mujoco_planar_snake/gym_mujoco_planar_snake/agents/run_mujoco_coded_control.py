@@ -17,6 +17,7 @@ from gym_mujoco_planar_snake.common.model_saver_wrapper import ModelSaverWrapper
 #from gym_mujoco_planar_snake.common.my_observation_wrapper import MyObservationWrapper
 
 import math
+from pprint import pprint
 
 """
  In the gait equation, the frequency is for changing speed, the amplitude is to change the "S" shape, 
@@ -132,18 +133,19 @@ def run_environment_episode(env, max_timesteps, render, lambda_deg=110, alpha_de
 
         # with head
         for i in range(1,K+1):
+            # print("-----i is: ", i)
             amp = a * ((i) * y / K + z)
 
             #amp = np.pi/2 # aka alpha
             #lam = 2*np.pi/(K+1) # aka beta
 
-            phi = b + amp * math.cos(w * t - lam * (i))
+            phi = b*1 + amp * math.cos(w * t - lam * (i))
             #sim.setJointTargetPosition(carJoints[i], -phi * (1 - math.exp(p * t)))
-            action[i-1] = -phi * (1 - math.exp(p * t))
+            action[i-1] = -phi * (1 - 1*math.exp(p * t))
 
 
         # Head Orientation Compensation
-        """
+        #"""
         theta = 0
         snakeDir = 0
         JointPosition = obs[0:8]
@@ -160,8 +162,8 @@ def run_environment_episode(env, max_timesteps, render, lambda_deg=110, alpha_de
         snakeDir = snakeDir / (K+1)
 
         #sim.setJointTargetPosition(carJoints[1], -snakeDir * (1 - math.exp(p * t)))
-        #action[0] = -snakeDir * (1 - math.exp(p * t))
-        """
+        action[0] = -snakeDir * (1 - math.exp(p * t))
+        #"""
 
         obs, reward, done, info = env.step(action)
         #print(info["joint_powers"])
@@ -247,17 +249,29 @@ def evaluate_power_velocity(env_id):
 
 def evaluate_target_tracking(env_id):
     env = gym.make(env_id)
-    env._max_episode_steps = env.spec.max_episode_steps * 2
+    env._max_episode_steps = env.spec.max_episode_steps * 1
 
-    render = True
+    render = False
 
-    lambda_deg = 40
-    alpha_deg = 70
-    w_para = 1*np.pi
-    y_para = 0.4
+    # lambda_deg = 110
+    # alpha_deg = 50
+    # w_para = 0.25*np.pi
+    # y_para = 0.3
+
+    lambda_deg = 60
+    alpha_deg = 60
+    w_para = 0.3*np.pi
+    y_para = 0.5     
+
+    info_dict_collector = InfoDictCollector(env)   
 
     done, number_of_timesteps, info_collector = \
             run_environment_episode(env, env._max_episode_steps, render, lambda_deg, alpha_deg, w_para, y_para)
+
+    # print(info_collector.sensor_head_velocity)
+    # pprint(dir(info_collector))
+    print(info_collector.dict_list_infos['target_v'])
+    # info_dict_collector.following_eval_save()
 
 def enjoy(env_id):
 
@@ -299,8 +313,8 @@ def main():
     parser.add_argument('--evaluate_power_velocity', type=bool, default=False)  # 1e6
 
     # env
-    parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-v1')
-    #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-line-v1')
+    #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-v1')
+    parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-line-v1')
     #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-zigzag-v1')
     #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-circle-v1')
     #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-random-v1')
