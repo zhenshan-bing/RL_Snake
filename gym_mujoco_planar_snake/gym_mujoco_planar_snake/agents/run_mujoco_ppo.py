@@ -168,7 +168,7 @@ def evaluate_target_tracking(env_id):
 
     # there is somehow a bug somewhere. somehow always one run fails... therefore run everything twice
     seed = [1,2]
-    max_timesteps = 3000000
+    max_timesteps = 3000000 *1
 
     # model select
     #
@@ -191,7 +191,7 @@ def evaluate_target_tracking(env_id):
     grid = ParameterGrid(param_grid={'eval_env_id': eval_env_id, 'seed': seed})
     paras = list(grid)
 
-    render = True
+    render = False
 
 
     info_dict_collector = InfoDictCollector(None)
@@ -237,7 +237,7 @@ def evaluate_target_tracking(env_id):
     info_dict_collector.following_eval_save(modelversion)
 
     # plot
-    import_plots.evaluate_following()
+    import_plots.evaluate_target_tracking()
 
 
 

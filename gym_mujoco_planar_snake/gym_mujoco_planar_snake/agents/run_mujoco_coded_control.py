@@ -14,6 +14,7 @@ import os
 import os.path as osp
 
 from gym_mujoco_planar_snake.common.model_saver_wrapper import ModelSaverWrapper
+import gym_mujoco_planar_snake.benchmark.plots as import_plots
 #from gym_mujoco_planar_snake.common.my_observation_wrapper import MyObservationWrapper
 
 import math
@@ -251,7 +252,7 @@ def evaluate_target_tracking(env_id):
     env = gym.make(env_id)
     env._max_episode_steps = env.spec.max_episode_steps * 1
 
-    render = False
+    render = True
 
     # lambda_deg = 110
     # alpha_deg = 50
@@ -268,10 +269,16 @@ def evaluate_target_tracking(env_id):
     done, number_of_timesteps, info_collector = \
             run_environment_episode(env, env._max_episode_steps, render, lambda_deg, alpha_deg, w_para, y_para)
 
+    info_dict_collector.add_info_collector(info_collector)
+    modelversion = 666
+    info_dict_collector.following_eval_save(modelversion)
+
     # print(info_collector.sensor_head_velocity)
     # pprint(dir(info_collector))
-    print(info_collector.dict_list_infos['target_v'])
+    print(info_collector.dict_list_infos['head_y'])
     # info_dict_collector.following_eval_save()
+
+    import_plots.evaluate_target_tracking()
 
 def enjoy(env_id):
 
