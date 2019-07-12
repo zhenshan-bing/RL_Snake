@@ -422,6 +422,9 @@ class MujocoPlanarSnakeCarsAngleEnv(MujocoPlanarSnakeCarsEnv):
         return ob
 
     def step(self, a):
+        
+
+
         # first init
         if self.sliders_idx == None:
             self.init_idx_values()

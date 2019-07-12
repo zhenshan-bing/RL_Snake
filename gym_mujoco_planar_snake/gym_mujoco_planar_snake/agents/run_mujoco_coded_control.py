@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from baselines import bench
+from baselines.common import set_global_seeds
 import gym, logging
 from baselines import logger
 
@@ -41,6 +42,11 @@ def run_environment_episode(env, max_timesteps, render, lambda_deg=110, alpha_de
 #def run_environment_episode(env, max_timesteps, render, lambda_deg=120, alpha_deg=90, w_para=0.5, y_para=0.1):
     number_of_timestep = 0
     done = False
+
+    # set seed
+    seed=1
+    set_global_seeds(seed)
+    env.seed(seed)
 
     # pos
     # orientation =
@@ -107,7 +113,8 @@ def run_environment_episode(env, max_timesteps, render, lambda_deg=110, alpha_de
 
     obs = env.reset()
 
-    info_collector = InfoCollector(env, {'lambda_deg':lambda_deg, 'alpha_deg':alpha_deg, 'w_para':w_para, 'y_para':y_para})
+    # info_collector = InfoCollector(env, {'lambda_deg':lambda_deg, 'alpha_deg':alpha_deg, 'w_para':w_para, 'y_para':y_para})
+    info_collector = InfoCollector(env, {'env':env, 'seed':seed})
 
     while (not done) and number_of_timestep < max_timesteps:
 
@@ -169,7 +176,8 @@ def run_environment_episode(env, max_timesteps, render, lambda_deg=110, alpha_de
         obs, reward, done, info = env.step(action)
         #print(info["joint_powers"])
 
-
+        info['seed'] = seed
+        info['env'] = env.spec.id
         info_collector.add_info(info)
 
 
@@ -249,33 +257,54 @@ def evaluate_power_velocity(env_id):
 
 
 def evaluate_target_tracking(env_id):
-    env = gym.make(env_id)
-    env._max_episode_steps = env.spec.max_episode_steps * 1
 
-    render = True
+    seed = [1]
+    # envs
+    eval_env_id = ['Mujoco-planar-snake-cars-cam-dist-line-v1',
+                   'Mujoco-planar-snake-cars-cam-dist-wave-v1',
+                   'Mujoco-planar-snake-cars-cam-dist-zigzag-v1',
+                   'Mujoco-planar-snake-cars-cam-dist-random-v1',
+                   ]
 
-    # lambda_deg = 110
-    # alpha_deg = 50
-    # w_para = 0.25*np.pi
-    # y_para = 0.3
+    grid = ParameterGrid(param_grid={'eval_env_id': eval_env_id, 'seed': seed})
+    paras = list(grid)
 
-    lambda_deg = 60
-    alpha_deg = 60
-    w_para = 0.3*np.pi
-    y_para = 0.5     
+    for i, para in enumerate(paras):
+        eval_env_id = para['eval_env_id']
+        seed = int(para['seed'])
 
-    info_dict_collector = InfoDictCollector(env)   
 
-    done, number_of_timesteps, info_collector = \
-            run_environment_episode(env, env._max_episode_steps, render, lambda_deg, alpha_deg, w_para, y_para)
 
-    info_dict_collector.add_info_collector(info_collector)
-    modelversion = 666
+        env = gym.make(env_id)
+        env._max_episode_steps = env.spec.max_episode_steps * 1
+
+        render = False
+
+        # lambda_deg = 110
+        # alpha_deg = 50
+        # w_para = 0.25*np.pi
+        # y_para = 0.3
+
+        lambda_deg = 60
+        alpha_deg = 60
+        w_para = 0.3*np.pi
+        y_para = 0.5     
+
+        info_dict_collector = InfoDictCollector(None)   
+
+        done, number_of_timesteps, info_collector = \
+                run_environment_episode(env, env._max_episode_steps, render, lambda_deg, alpha_deg, w_para, y_para)
+
+        info_dict_collector.add_info_collector(info_collector)
+
+        env.close()
+
+    modelversion = 3000
     info_dict_collector.following_eval_save(modelversion)
 
     # print(info_collector.sensor_head_velocity)
     # pprint(dir(info_collector))
-    print(info_collector.dict_list_infos['head_y'])
+    # print(info_collector.dict_list_infos['head_y'])
     # info_dict_collector.following_eval_save()
 
     import_plots.evaluate_target_tracking()

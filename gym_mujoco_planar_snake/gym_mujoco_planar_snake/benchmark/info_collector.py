@@ -87,7 +87,7 @@ class InfoCollector():
     def save_csv(self, dir, fname= None):
         df = pd.DataFrame.from_dict(self.dict_list_infos)
 
-
+        print("-------HERE------") 
 
         if fname is None:
             fname = 'data_run_env_{}_seed_{}'.format(self.paras['env'].spec.id, self.paras['seed'])
@@ -205,7 +205,7 @@ class InfoDictCollector():
         all_mean_dict = None
 
         for info_colletor in self.info_collector_set:
-
+             
             info_colletor.save_csv(newdir)
 
             mean_dict = info_colletor.get_mean_dict(columns)

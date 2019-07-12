@@ -43,6 +43,7 @@ class ModelSaverWrapper(ObservationWrapper):
         return self.env.reset(**kwargs)
 
     def step(self, action):
+        
 
         self.total_steps += 1
         self.total_steps_save_counter += 1

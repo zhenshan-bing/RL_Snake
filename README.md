@@ -146,5 +146,5 @@ See the files in directory [gym_mujoco_planar_snake/benchmark/plot_data].
 
 Evaluate:
 ```bash 
-gym_mujoco_planar_snake/agents/run_mujoco_coded_control.py --env Mujoco-planar-snake-cars-angle-line-v1 --evaluate_power_velocity True
+gym_mujoco_planar_snake/agents/run_mujoco_coded_control.py --env Mujoco-planar-snake-cars-angle-line-v1 --evaluate_target_tracking True
 ```
