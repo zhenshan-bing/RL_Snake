@@ -3,6 +3,7 @@ from baselines import bench
 from baselines.common import set_global_seeds
 import gym, logging
 from baselines import logger
+import tensorflow as tf
 
 from collections import Counter
 from sklearn.model_selection import ParameterGrid, GridSearchCV
@@ -269,37 +270,40 @@ def evaluate_target_tracking(env_id):
     grid = ParameterGrid(param_grid={'eval_env_id': eval_env_id, 'seed': seed})
     paras = list(grid)
 
-    for i, para in enumerate(paras):
-        eval_env_id = para['eval_env_id']
-        seed = int(para['seed'])
+    info_dict_collector = InfoDictCollector(None)
+
+    render = False
+
+    with tf.device('/cpu'):
+
+        for i, para in enumerate(paras):
+            eval_env_id = para['eval_env_id']
+            seed = int(para['seed'])
+
+            env = gym.make(eval_env_id)
+            env._max_episode_steps = env.spec.max_episode_steps * 3
 
 
+            # lambda_deg = 110
+            # alpha_deg = 50
+            # w_para = 0.25*np.pi
+            # y_para = 0.3
 
-        env = gym.make(env_id)
-        env._max_episode_steps = env.spec.max_episode_steps * 1
+            lambda_deg = 60
+            alpha_deg = 60
+            w_para = 0.3*np.pi
+            y_para = 0.5     
 
-        render = False
+               
 
-        # lambda_deg = 110
-        # alpha_deg = 50
-        # w_para = 0.25*np.pi
-        # y_para = 0.3
+            done, number_of_timesteps, info_collector = \
+                    run_environment_episode(env, env._max_episode_steps, render, lambda_deg, alpha_deg, w_para, y_para)
 
-        lambda_deg = 60
-        alpha_deg = 60
-        w_para = 0.3*np.pi
-        y_para = 0.5     
+            info_dict_collector.add_info_collector(info_collector)
 
-        info_dict_collector = InfoDictCollector(None)   
+            env.close()
 
-        done, number_of_timesteps, info_collector = \
-                run_environment_episode(env, env._max_episode_steps, render, lambda_deg, alpha_deg, w_para, y_para)
-
-        info_dict_collector.add_info_collector(info_collector)
-
-        env.close()
-
-    modelversion = 3000
+    modelversion = 666
     info_dict_collector.following_eval_save(modelversion)
 
     # print(info_collector.sensor_head_velocity)
@@ -348,6 +352,8 @@ def main():
     # grid
     parser.add_argument('--evaluate_power_velocity', type=bool, default=False)  # 1e6
 
+    parser.add_argument('--evaluate_target_tracking', type=bool, default=False)  # 1e6
+
     # env
     #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-v1')
     parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-line-v1')
@@ -367,10 +373,14 @@ def main():
     if args.evaluate_power_velocity:
         print("----------First----------")
         evaluate_power_velocity(args.env)
+
+    elif args.evaluate_target_tracking:
+        print("----------Second----------")
+        evaluate_target_tracking(args.env)
     
     # Enjoy this controller    
     else:
-        print("----------Second----------")
+        print("----------Third----------")
         evaluate_target_tracking(args.env)
         # enjoy(args.env)
         

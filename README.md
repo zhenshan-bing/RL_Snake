@@ -142,9 +142,12 @@ See the files in directory [gym_mujoco_planar_snake/benchmark/plot_data].
 
 
 #### 2. Target Tracking Experiment  
+For this task, the gear has to be set as 1 (/envs/planar_snake_cars_servo.xml).
 #### 2.1 Equation controller:
 
 Evaluate:
 ```bash 
-gym_mujoco_planar_snake/agents/run_mujoco_coded_control.py --env Mujoco-planar-snake-cars-angle-line-v1 --evaluate_target_tracking True
+python run_mujoco_coded_control.py --env Mujoco-planar-snake-cars-cam-dist-random-v1 --evaluate_target_tracking Ture
 ```
+
+## Work Log
