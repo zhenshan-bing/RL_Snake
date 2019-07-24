@@ -89,7 +89,7 @@
 
 
         -->
-        <position ctrllimited="true" ctrlrange="-1.5 1.5" forcelimited="true" forcerange="-20.0 20.0" kp="20" gear="0.175"/>
+        <position ctrllimited="true" ctrlrange="-1.5 1.5" forcelimited="true" forcerange="-20.0 20.0" kp="20" gear="1"/>
 
     </default>
 

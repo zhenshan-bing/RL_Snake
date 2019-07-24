@@ -129,6 +129,11 @@ def run_environment_episode(env, max_timesteps, render, lambda_deg=110, alpha_de
         angle_difference = env.unwrapped.get_head_to_target_degree_angle()
         b = -angle_difference / 100 # seems working ok
 
+        # speed
+        dis_difference = env.unwrapped.calc_distance() - 4
+        w = 1.5*math.pi + dis_difference * 0.0
+        print("-----Distance Difference------: ", dis_difference)
+
 
         action = np.zeros(8)#env.action_space.sample() # setJointTargetPosition
 
@@ -272,7 +277,7 @@ def evaluate_target_tracking(env_id):
 
     info_dict_collector = InfoDictCollector(None)
 
-    render = False
+    render = True
 
     with tf.device('/cpu'):
 
