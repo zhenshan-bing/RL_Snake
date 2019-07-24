@@ -147,7 +147,7 @@ For this task, the gear has to be set as 1 (/envs/planar_snake_cars_servo.xml).
 
 Evaluate:
 ```bash 
-python run_mujoco_coded_control.py --env Mujoco-planar-snake-cars-cam-dist-random-v1 --evaluate_target_tracking Ture
+python run_mujoco_coded_control.py --env Mujoco-planar-snake-cars-cam-dist-random-v1 --evaluate_target_tracking Ture --render Ture
 ```
 
 ## Work Log

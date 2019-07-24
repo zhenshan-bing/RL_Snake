@@ -83,7 +83,7 @@ def run_environment_episode(env, max_timesteps, render, lambda_deg=110, alpha_de
     w = w_para * math.pi # 1.5
 
     # for the start
-    p = -0.5 # -0.3
+    p = -1 # -0.3
 
     # Calculate the mean effective lenght of the snake
     #Direction of the n-th Module relative to the head
@@ -131,9 +131,9 @@ def run_environment_episode(env, max_timesteps, render, lambda_deg=110, alpha_de
 
         # speed
         dis_difference = env.unwrapped.calc_distance() - 4
-        w = 1.5*math.pi + dis_difference * 0.0
-        print("-----Distance Difference------: ", dis_difference)
-
+        w = w + dis_difference * 0.01*math.pi
+        #print("-----Distance Difference------: ", dis_difference)
+        #print("------------- w --------------: ", w)
 
         action = np.zeros(8)#env.action_space.sample() # setJointTargetPosition
 
@@ -159,7 +159,7 @@ def run_environment_episode(env, max_timesteps, render, lambda_deg=110, alpha_de
 
 
         # Head Orientation Compensation
-        #"""
+        """
         theta = 0
         snakeDir = 0
         JointPosition = obs[0:8]
@@ -262,7 +262,7 @@ def evaluate_power_velocity(env_id):
 
 
 
-def evaluate_target_tracking(env_id):
+def evaluate_target_tracking(env_id, render_flag):
 
     seed = [1]
     # envs
@@ -277,7 +277,7 @@ def evaluate_target_tracking(env_id):
 
     info_dict_collector = InfoDictCollector(None)
 
-    render = True
+    render = render_flag
 
     with tf.device('/cpu'):
 
@@ -294,9 +294,9 @@ def evaluate_target_tracking(env_id):
             # w_para = 0.25*np.pi
             # y_para = 0.3
 
-            lambda_deg = 60
+            lambda_deg = 100
             alpha_deg = 60
-            w_para = 0.3*np.pi
+            w_para = 2
             y_para = 0.5     
 
                
@@ -366,6 +366,8 @@ def main():
     #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-circle-v1')
     #parser.add_argument('--env', help='environment ID', default='Mujoco-planar-snake-cars-angle-random-v1')
 
+    # render
+    parser.add_argument('--render', help='render simulation', type=bool, default=False)
 
     args = parser.parse_args()
     logger.configure()
@@ -381,7 +383,7 @@ def main():
 
     elif args.evaluate_target_tracking:
         print("----------Second----------")
-        evaluate_target_tracking(args.env)
+        evaluate_target_tracking(args.env, args.render)
     
     # Enjoy this controller    
     else:
