@@ -167,7 +167,7 @@ def evaluate_power_velocity(env_id):
 def evaluate_target_tracking(env_id):
 
     # there is somehow a bug somewhere. somehow always one run fails... therefore run everything twice
-    seed = [1,2]
+    seed = [1]
     max_timesteps = 3000000 *1
 
     # model select
