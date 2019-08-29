@@ -127,11 +127,11 @@ def run_environment_episode(env, max_timesteps, render, lambda_deg=110, alpha_de
 
         # direction
         angle_difference = env.unwrapped.get_head_to_target_degree_angle()
-        b = -angle_difference / 100 # seems working ok
+        b = -angle_difference / 50 # seems working ok, 100
 
         # speed
         dis_difference = env.unwrapped.calc_distance() - 4
-        w = w + dis_difference * 0.01*math.pi
+        w = w + dis_difference * 0.025*math.pi  # 0.01 works ok
         #print("-----Distance Difference------: ", dis_difference)
         #print("------------- w --------------: ", w)
 
@@ -278,6 +278,7 @@ def evaluate_target_tracking(env_id, render_flag):
     info_dict_collector = InfoDictCollector(None)
 
     render = render_flag
+    print("===============================================================", render_flag)
 
     with tf.device('/cpu'):
 
@@ -294,10 +295,10 @@ def evaluate_target_tracking(env_id, render_flag):
             # w_para = 0.25*np.pi
             # y_para = 0.3
 
-            lambda_deg = 100
+            lambda_deg = 110
             alpha_deg = 60
             w_para = 2
-            y_para = 0.5     
+            y_para = 0.5*0     
 
                
 
@@ -383,6 +384,7 @@ def main():
 
     elif args.evaluate_target_tracking:
         print("----------Second----------")
+        print(args.render)
         evaluate_target_tracking(args.env, args.render)
     
     # Enjoy this controller    

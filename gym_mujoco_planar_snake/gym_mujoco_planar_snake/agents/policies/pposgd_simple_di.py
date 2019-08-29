@@ -354,6 +354,7 @@ def learn(env, policy_func, *,
         adam_epsilon=1e-5,
         schedule='constant' # annealing for stepsize parameters (epsilon and adam)
         ):
+    print("----------------------------------------------------------------------------Learning is here ...")
     # Setup losses and stuff
     # ----------------------------------------
     ob_space = env.observation_space

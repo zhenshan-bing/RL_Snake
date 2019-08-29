@@ -344,7 +344,7 @@ def enjoy(env_id, seed):
 
 def train_ppo1(env_id, num_timesteps, sfs, seed):
     from baselines.ppo1 import pposgd_simple
-    sess = U.make_session(num_cpu=1)
+    sess = U.make_session(num_cpu=4)
     sess.__enter__()
     set_global_seeds(seed)
     env = gym.make(env_id)
@@ -381,7 +381,7 @@ def main():
     #parser.add_argument('--seed', help='RNG seed', type=int, default=1)
     parser.add_argument('--seed', help='RNG seed', type=int, default=0)
 
-    parser.add_argument('--num-timesteps', type=int, default=int(1e6))  # 1e6
+    parser.add_argument('--num-timesteps', type=int, default=int(3e6))  # 1e6
 
     #parser.add_argument('--train', help='do training or load model', type=bool, default=True)
     parser.add_argument('--train', help='do training or load model', type=bool, default=False)
