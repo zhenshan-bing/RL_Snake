@@ -361,7 +361,7 @@ def train_ppo1(env_id, num_timesteps, sfs, seed):
     env = ModelSaverWrapper(env, model_dir, sfs)
 
     env.seed(seed)
-    #env.render()
+    # env.render()
     gym.logger.setLevel(logging.WARN)
     pposgd_simple.learn(env, policy_fn,
                         max_timesteps=num_timesteps,

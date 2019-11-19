@@ -4,3 +4,75 @@ ERROR: Expired activation key
 Fri Aug  2 11:04:10 2019
 ERROR: Expired activation key
 
+Mon Aug 26 11:33:48 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 11:38:13 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 11:43:40 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 11:46:25 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 11:47:41 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 11:49:09 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 11:50:50 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 11:58:04 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 12:01:48 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 12:04:20 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 12:05:59 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 12:06:13 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 12:08:07 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 12:14:13 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 12:14:52 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 13:19:49 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 13:50:26 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 14:01:04 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 14:22:17 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Mon Aug 26 14:46:54 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Tue Sep 10 11:46:01 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Tue Sep 10 11:46:56 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Tue Sep 10 11:50:20 2019
+ERROR: GLEW initalization error: Missing GL version
+
+Tue Sep 10 11:52:06 2019
+ERROR: GLEW initalization error: Missing GL version
+
