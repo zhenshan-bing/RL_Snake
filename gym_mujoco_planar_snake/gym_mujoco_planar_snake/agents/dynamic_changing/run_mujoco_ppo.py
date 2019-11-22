@@ -5,6 +5,7 @@ import gym, logging
 from baselines import logger
 import tensorflow as tf
 import numpy as np
+from random import randint
 
 from sklearn.model_selection import ParameterGrid
 
@@ -145,6 +146,7 @@ def evaluate_power_velocity(env_id):
     target_v = np.arange(0.025, 0.255, 0.005)
 
     seed = [1]
+    seed = [randint(0, 10)]
     #seed = np.arange(1, 4, 1)
 
     grid = ParameterGrid(param_grid={'target_v': target_v, 'seed': seed})
@@ -408,6 +410,7 @@ def train_ppo1(env_id, num_timesteps, sfs, seed):
     from baselines.ppo1 import pposgd_simple
     sess = U.make_session(num_cpu=1)
     sess.__enter__()
+    seed = randint(0, 10)
     set_global_seeds(seed)
     env = gym.make(env_id)
     # # print(len(env.unwrapped.sim.model.body_inertia))
@@ -431,6 +434,8 @@ def train_ppo1(env_id, num_timesteps, sfs, seed):
     env = bench.Monitor(env, log_dir)
 
     env = ModelSaverWrapper(env, model_dir, sfs)
+
+
 
     env.seed(seed)
     gym.logger.setLevel(logging.WARN)
