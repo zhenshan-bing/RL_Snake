@@ -406,13 +406,20 @@ def generate_expert_traj(env_id, seed):
 
 def train_ppo1(env_id, num_timesteps, sfs, seed):
     from baselines.ppo1 import pposgd_simple
-    # config = tf.ConfigProto()
-    # config.intra_op_parallelism_threads = 50
-    # config.inter_op_parallelism_threads = 50
     sess = U.make_session(num_cpu=1)
     sess.__enter__()
     set_global_seeds(seed)
     env = gym.make(env_id)
+    # # print(len(env.unwrapped.sim.model.body_inertia))
+    # mass_index = {2,5,8,11,14,17,20,23,26}
+    #     # mu_mass, sigma_mass = 0, 0.05
+    #     # body_mass = np.random.normal(mu_mass, sigma_mass, 3)
+        
+    # body_mass = (np.random.random() - 0.5) * 0.2
+    #     # print(body_mass)
+
+    # for i in mass_index:
+    #     env.unwrapped.sim.model.body_mass[i] = env.unwrapped.sim.model.body_mass[i] * (1+body_mass*1)
 
     model_dir = get_model_dir(env_id, 'ppo')
 
