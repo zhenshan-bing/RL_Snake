@@ -1,0 +1,35 @@
+<mujoco model="servo">
+    <compiler angle="degree" coordinate="global" inertiafromgeom="true"/>
+<!--     <default>
+      <joint axis="0 0 1" limited="true" type="hinge" armature='0.001' damping="0.01" frictionloss="0.001"/>
+      <position ctrllimited="true" ctrlrange="-1.5707 1.5707" forcelimited="true" forcerange="-20.0 20.0" kp='20' gear="1"/>
+    </default> -->
+
+    <option integrator="Euler" timestep="0.01">
+    </option>
+
+    <asset>
+        <texture builtin="gradient" height="100" rgb1="1 1 1" rgb2="0 0 0" type="skybox" width="100"/>
+        <texture builtin="flat" height="1278" mark="cross" markrgb="1 1 1" name="texgeom" random="0.01"
+                 rgb1="0.8 0.6 0.4" rgb2="0.8 0.6 0.4" type="cube" width="127"/>
+        <material name="geom" texture="texgeom" texuniform="true"/>
+    </asset>
+ 
+    <worldbody>
+<!--       <body name="target_ball" pos="0 0 0">
+          <geom name="target_ball_geom" type="sphere" pos="0.2 0 0" size="0.1" material="geom" rgba="0.6 0.7 0.8 1"/>
+      </body>
+ -->
+      <body>
+        <geom density="1000" pos="0 0 0.0" size=".1 .1 .1" type="box" rgba=".9 .1 .1 1"/>
+        <body>
+          <geom density="3000" size="0.05 0.03 0.03" type="box" material="geom" rgba="0.8 0.7 .6 1" pos="0.05 0 0.15"/>
+          <joint name="servo_1" pos="0 0 0.15" range="-90 90" axis="0 0 1" limited="true" type="hinge" armature='0.1' damping="0.1" frictionloss="0.1"/>
+        </body>
+      </body>
+    </worldbody>
+ 
+    <actuator>
+      <motor name="actuator_joint01" joint="servo_1" ctrllimited="true" ctrlrange="-16.36 16.36" forcelimited="true" forcerange="-16.36 16.36" gear="1"/>
+    </actuator>
+</mujoco>
